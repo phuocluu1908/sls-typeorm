@@ -80,6 +80,22 @@ functions:
           cors:
             origin: '*'
 
+  # add_todo:
+  #   handler: src/handlers/todos.addTodo
+  #   events:
+  #     - http:
+  #         method: POST
+  #         path: /todo
+  #         cors:
+  #           origin: '*'
+  get_todo:
+    handler: src/handlers/todos.getTodo
+    events:
+      - http:
+          method: GET
+          path: /todo
+          cors:
+            origin: '*'
   add_todo:
     handler: src/handlers/todos.addTodo
     events:
@@ -88,11 +104,19 @@ functions:
           path: /todo
           cors:
             origin: '*'
-  get_todo:
-    handler: src/handlers/todos.getTodo
+  update_todo:
+    handler: src/handlers/todos.updateTodo
     events:
       - http:
-          method: GET
+          method: PATCH
+          path: /todo
+          cors:
+            origin: '*'
+  delete_todo:
+    handler: src/handlers/todos.deleteTodo
+    events:
+      - http:
+          method: DELETE
           path: /todo
           cors:
             origin: '*'

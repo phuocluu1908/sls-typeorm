@@ -36,24 +36,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTodo = exports.addTodo = void 0;
+exports.deleteTodo = exports.updateTodo = exports.addTodo = exports.getTodo = void 0;
 require("reflect-metadata");
-var dbconfig_1 = require("../dbconfig");
-var todo_1 = require("../entity/todo");
+var connection_1 = require("../connection");
+var Todo_1 = require("../entity/Todo");
 var data_source_1 = require("../data-source");
+var todoRepository = data_source_1.AppDataSource.getRepository(Todo_1.Todo);
+var getTodo = function (event) { return __awaiter(void 0, void 0, void 0, function () {
+    var todos;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, connection_1.default)()];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, todoRepository.find()];
+            case 2:
+                todos = _a.sent();
+                return [2 /*return*/, {
+                        statusCode: 200,
+                        body: JSON.stringify({
+                            message: todos,
+                        }, null, 2),
+                    }];
+        }
+    });
+}); };
+exports.getTodo = getTodo;
 var addTodo = function (event) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, title, description, todo;
     return __generator(this, function (_b) {
         switch (_b.label) {
-            case 0: return [4 /*yield*/, (0, dbconfig_1.default)()];
+            case 0: return [4 /*yield*/, (0, connection_1.default)()];
             case 1:
                 _b.sent();
-                _a = JSON.parse(event.body).data, title = _a.title, description = _a.description;
-                todo = new todo_1.Todo();
+                _a = JSON.parse(event.body), title = _a.title, description = _a.description;
+                todo = new Todo_1.Todo();
                 todo.title = title;
                 todo.description = description;
                 todo.status = 'todo';
-                return [4 /*yield*/, data_source_1.AppDataSource.manager.save(todo)];
+                return [4 /*yield*/, todoRepository.save(todo)];
             case 2:
                 _b.sent();
                 return [2 /*return*/, {
@@ -66,25 +87,56 @@ var addTodo = function (event) { return __awaiter(void 0, void 0, void 0, functi
     });
 }); };
 exports.addTodo = addTodo;
-var getTodo = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var todos;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, dbconfig_1.default)()];
+var updateTodo = function (event) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, title, description, status, todoRepository, todo;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0: return [4 /*yield*/, (0, connection_1.default)()];
             case 1:
-                _a.sent();
-                return [4 /*yield*/, data_source_1.AppDataSource.manager.find(todo_1.Todo)];
+                _b.sent();
+                _a = JSON.parse(event.body), id = _a.id, title = _a.title, description = _a.description, status = _a.status;
+                todoRepository = data_source_1.AppDataSource.getRepository(Todo_1.Todo);
+                return [4 /*yield*/, todoRepository.findOneBy({ id: id })];
             case 2:
-                todos = _a.sent();
-                console.log(todos);
+                todo = _b.sent();
+                if (title)
+                    todo.title = title;
+                if (description)
+                    todo.description = description;
+                if (status)
+                    todo.status = status;
+                return [4 /*yield*/, todoRepository.save(todo)];
+            case 3:
+                _b.sent();
                 return [2 /*return*/, {
                         statusCode: 200,
                         body: JSON.stringify({
-                            message: todos,
+                            message: todo,
                         }, null, 2),
                     }];
         }
     });
 }); };
-exports.getTodo = getTodo;
+exports.updateTodo = updateTodo;
+var deleteTodo = function (event) { return __awaiter(void 0, void 0, void 0, function () {
+    var id;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, connection_1.default)()];
+            case 1:
+                _a.sent();
+                id = JSON.parse(event.body).id;
+                return [4 /*yield*/, todoRepository.delete({ id: id })];
+            case 2:
+                _a.sent();
+                return [2 /*return*/, {
+                        statusCode: 200,
+                        body: JSON.stringify({
+                            message: "Todo was removed",
+                        }, null, 2),
+                    }];
+        }
+    });
+}); };
+exports.deleteTodo = deleteTodo;
 //# sourceMappingURL=todos.js.map

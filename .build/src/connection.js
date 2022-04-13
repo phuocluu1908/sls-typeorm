@@ -36,40 +36,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showBody = exports.showUsers = void 0;
-require("reflect-metadata");
-var connection_1 = require("../connection");
-var User_1 = require("../entity/User");
-var data_source_1 = require("../data-source");
-var showUsers = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
+var data_source_1 = require("./data-source");
+var connection = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, connection_1.default)()];
+            case 0: return [4 /*yield*/, data_source_1.AppDataSource.initialize()];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, data_source_1.AppDataSource.manager.find(User_1.User)];
-            case 2:
-                users = _a.sent();
-                return [2 /*return*/, {
-                        statusCode: 200,
-                        body: JSON.stringify({
-                            message: users,
-                        }, null, 2),
-                    }];
+                console.log('connected');
+                return [2 /*return*/];
         }
     });
 }); };
-exports.showUsers = showUsers;
-var showBody = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        console.log(JSON.parse(event.body));
-        return [2 /*return*/, {
-                body: {
-                    message: event
-                }
-            }];
-    });
-}); };
-exports.showBody = showBody;
-//# sourceMappingURL=users.js.map
+exports.default = connection;
+//# sourceMappingURL=connection.js.map

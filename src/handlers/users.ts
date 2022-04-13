@@ -1,5 +1,5 @@
 import "reflect-metadata"
-import connection from "../dbconfig"
+import connection from "../connection"
 import { User } from "../entity/User"
 import { AppDataSource } from "../data-source"
 
@@ -16,9 +16,6 @@ export const showUsers = async (event) => {
             2
         ),
     };
-
-    // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-    // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 }
 
 export const showBody = async (event) => {
